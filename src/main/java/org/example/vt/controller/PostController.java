@@ -21,8 +21,8 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping
-    public Page<PostResponse> getPosts(Integer page) {
+    @GetMapping("/page/{page}")
+    public Page<PostResponse> getPosts(@PathVariable Integer page) {
         return postService.findAll(PageRequest.of(page, 10));
     }
 
