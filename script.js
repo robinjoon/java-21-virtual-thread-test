@@ -173,7 +173,7 @@ export default function () {
         },
     };
 
-    let response = http.get('http://localhost:8080/solutions/mine/333', params);
+    let response = http.get('http://localhost:8080/posts/page/123', params);
 
     check(response, {
         'is status 200': (r) => r.status === 200,
