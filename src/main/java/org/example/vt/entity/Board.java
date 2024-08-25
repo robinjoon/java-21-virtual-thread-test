@@ -1,14 +1,19 @@
 package org.example.vt.entity;
 
 
-import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
     @Id
@@ -16,9 +21,4 @@ public class Board {
     private Long id;
 
     private String name;
-
-    @OneToMany(mappedBy = "board")
-    private List<Post> posts;
-
-    // Getters and Setters
 }

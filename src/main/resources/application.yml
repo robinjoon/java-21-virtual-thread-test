@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: vt
+  datasource:
+    url: jdbc:mysql://test:3309/test?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
