@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  spring:
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '1.0'
+          memory: 1024M
+    image: pt09:latest
+    ports:
+      - "8080:8080"
+      - "8082:8082"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '1.0'
+          memory: 1024M
+    restart: always
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_DATABASE: 'develup'
+      MYSQL_ROOT_PASSWORD: '12345'
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
