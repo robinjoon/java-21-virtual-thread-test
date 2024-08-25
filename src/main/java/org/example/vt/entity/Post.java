@@ -1,12 +1,10 @@
 package org.example.vt.entity;
 
-import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +28,4 @@ public class Post {
 
     @ManyToOne
     private Board board;
-
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
 }
