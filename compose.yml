@@ -9,7 +9,7 @@ services:
         reservations:
           cpus: '1.0'
           memory: 1024M
-    image: vt09:latest
+    image: vt08:latest
     ports:
       - "8080:8080"
       - "8082:8082"
