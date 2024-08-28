@@ -19,7 +19,7 @@ export const options = {
 };
 
 export default function () {
-    const res = http.get('http://localhost:8080/posts/test');
+    const res = http.get('http://localhost:8080/posts/page/123');
 
     // 응답 상태 코드가 200인지 확인
     check(res, {
