@@ -48,6 +48,7 @@ public class JdbcFacadePostRepository implements FacadePostRepository {
             posts = getPosts(posts, connection);
             preparedStatement = connection.prepareStatement("select count(post.id) as C from post");
             resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             long size = resultSet.getLong("C");
             return new PageImpl<>(posts, pageable, size);
         } catch (SQLException e) {
@@ -61,6 +62,7 @@ public class JdbcFacadePostRepository implements FacadePostRepository {
                 PreparedStatement preparedStatement2 = connection.prepareStatement("select * from member where id = ?");
                 preparedStatement2.setLong(1, post.getMember().getId());
                 ResultSet resultSet2 = preparedStatement2.executeQuery();
+                resultSet2.next();
                 Long memberId = resultSet2.getLong("id");
                 String username = resultSet2.getString("username");
                 String password = resultSet2.getString("password");
@@ -74,6 +76,7 @@ public class JdbcFacadePostRepository implements FacadePostRepository {
                 PreparedStatement preparedStatement2 = connection.prepareStatement("select * from board where id = ?");
                 preparedStatement2.setLong(1, post.getBoard().getId());
                 ResultSet resultSet2 = preparedStatement2.executeQuery();
+                resultSet2.next();
                 Long boardId = resultSet2.getLong("id");
                 String name = resultSet2.getString("name");
                 Board board = new Board(boardId, name);
