@@ -3,179 +3,26 @@ import {check} from 'k6';
 
 export const options = {
     scenarios: {
-        vu_100_scenario1: {
-            executor: 'per-vu-iterations',
-            startTime: '20s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
+        constant_request_rate: {
+            executor: 'constant-arrival-rate',
+            rate: 100, // 초당 100개의 요청을 보냅니다.
+            timeUnit: '1s', // rate가 기준으로 삼는 시간 단위 (여기서는 1초)
+            duration: '30s', // 전체 테스트 기간
+            preAllocatedVUs: 50, // 미리 할당된 가상 사용자 수
+            maxVUs: 100, // 테스트 중에 사용할 최대 가상 사용자 수
         },
-        vu_100_scenario2: {
-            executor: 'per-vu-iterations',
-            startTime: '55s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario3: {
-            executor: 'per-vu-iterations',
-            startTime: '90s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario4: {
-            executor: 'per-vu-iterations',
-            startTime: '125s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario5: {
-            executor: 'per-vu-iterations',
-            startTime: '160s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario6: {
-            executor: 'per-vu-iterations',
-            startTime: '195s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario7: {
-            executor: 'per-vu-iterations',
-            startTime: '230s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario8: {
-            executor: 'per-vu-iterations',
-            startTime: '265s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario9: {
-            executor: 'per-vu-iterations',
-            startTime: '300s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario10: {
-            executor: 'per-vu-iterations',
-            startTime: '335s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario11: {
-            executor: 'per-vu-iterations',
-            startTime: '370s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario12: {
-            executor: 'per-vu-iterations',
-            startTime: '405s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario13: {
-            executor: 'per-vu-iterations',
-            startTime: '440s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario14: {
-            executor: 'per-vu-iterations',
-            startTime: '475s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario15: {
-            executor: 'per-vu-iterations',
-            startTime: '510s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario16: {
-            executor: 'per-vu-iterations',
-            startTime: '545s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario17: {
-            executor: 'per-vu-iterations',
-            startTime: '580s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario18: {
-            executor: 'per-vu-iterations',
-            startTime: '615s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario19: {
-            executor: 'per-vu-iterations',
-            startTime: '650s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
-        vu_100_scenario20: {
-            executor: 'per-vu-iterations',
-            startTime: '685s',
-            gracefulStop: '5s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '30s',
-        },
+    },
+    thresholds: {
+        http_req_duration: ['p(95)<500'], // 95%의 요청이 500ms 이내에 완료되어야 합니다.
+        'http_req_failed{scenario:constant_request_rate}': ['rate<0.01'], // 실패한 요청 비율이 1% 미만이어야 합니다.
     },
 };
 
 export default function () {
-    const params = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
+    const res = http.get('http://localhost:8080/posts/test');
 
-    let response = http.get('http://localhost:8080/posts/page/123', params);
-
-    check(response, {
-        'is status 200': (r) => r.status === 200,
+    // 응답 상태 코드가 200인지 확인
+    check(res, {
+        'status is 200': (r) => r.status === 200,
     });
 }
